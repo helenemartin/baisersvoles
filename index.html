@@ -15,7 +15,7 @@
 <div id="dotcom1" style="text-align:center; height:250px; width:300px; line-height:50px; color:white; float:left">
      <video width="300px" height="250px">
     </video> 
-    <span id="txtBox1" style="text-align:center; margin-top:25px; background-color:black; height:5px; width:300px;"></span>
+    <span id="txtBox1" style="text-align:center; margin-top:25px; padding:5px; background-color:black; height:5px; width:300px;"></span>
 
 </div>
 
@@ -23,14 +23,14 @@
 <div id="dotcom2" style="text-align:center; height:25px; width:300px; line-height:50px; color:white;float:right">
     <video width="300px" height="250px">
     </video> 
-    <span id="txtBox2" style="text-align:center; background-color:black; height:50px; width:300px;"></span>
+    <span id="txtBox2" style="text-align:center; background-color:black; padding:5px; height:50px; width:300px;"></span>
 </div>
 
 
 <div id="dotcom3" style="text-align:center; height:250px; width:300px; line-height:50px; color:white; float:left; margin-bottom:500px">
     <video width="300px" height="250px" style:"margin-bottom: 5px">
     </video> 
-    <span id="txtBox3" style="text-align:center; margin-top:125px; background-color:black; height:50px; width:300px;">
+    <span id="txtBox3" style="text-align:center; margin-top:125px; background-color:black; padding:5px; height:50px; width:300px;">
     </span>
 </div>
 
@@ -47,32 +47,25 @@
 <script type="text/javascript">
 
 
-var panel = 1,
-    names = [
-    ['Antoine', ' Doisnel'],
-    ['Christine', ' Darbon'],
-    ['Fabienne', ' Tabard']
-    ], 
+var firstNames = ['Antoine', 'Christine', 'Fabienne'];
+var secondNames = ['Doisnel', 'Darbon', 'Tabard']; 
 
-    fonts = [
-    'Arial, Helvetica, sans-serif'
-    ]
+   
 function rand_index(len) {
     return Math.floor(Math.random() * len);
 }
-function update() {
+function update(panel) {
 
-    "use strict";
-    var first, second, font, 
-    dotcomdiv = document.getElementById('dotcom' + panel);
-    first = rand_index(names.length);
-    second = rand_index(names.length);
-    getImage(names[first][0] + names[second][1]);
+    "use strict"; 
+    var dotcomdiv = document.getElementById('dotcom' + panel);
+    var firstName = firstNames[rand_index(firstNames.length)];
+    var secondName = secondNames[rand_index(secondNames.length)];
+    return getImage(firstName + ' ' + secondName, panel);
 }
 
-function getImage(query) {
+function getImage(query,panel) {
     var dotcomdiv = document.getElementById('dotcom' + panel);
-    text = document.getElementById('txtBox' + panel);
+    var text = document.getElementById('txtBox' + panel);
     text.innerHTML = query;
     var video = $('#dotcom'+panel).find('video');
     video.find('source').remove();
@@ -80,31 +73,57 @@ function getImage(query) {
     if(query == 'Antoine Doisnel') {
         source.setAttribute('src', 'video/adoisnel.mp4');
         video.append(source);
-        video.get(0).play();
+        
+        //video.get(0).play();
+        return video.get(0);
     } else if (query == 'Christine Darbon') {
         source.setAttribute('src', 'video/cdarbon.mp4');
         video.append(source);
-        video.get(0).play();
+        //video.get(0).play();
+        return video.get(0);
     } else if (query == 'Fabienne Tabard') {
         source.setAttribute('src', 'video/ftabard.mp4');
         video.append(source);
-        video.get(0).play();
+        //video.get(0).play();
+        return video.get(0);
     } else {
         // do nothing
     }
 
-    panel = panel + 1;
-    if (panel === 5) panel = 1;
-    font = fonts[rand_index(fonts.length)];
-    dotcomdiv.style.fontFamily = font;
 }
 
-update();
-update();
-update();
-update();
-setInterval(update, 2000);
 
+function watchVideo(video) {
+    if (video) {
+        numberOfPlayingVideos++;
+        video.onended = function(){
+            numberOfPlayingVideos--;
+            if (numberOfPlayingVideos == 0) {
+                window.location.reload(); 
+            }
+        };
+        video.play();  
+    }
+     
+}
+
+
+var video1=update(1);
+var video2=update(2);
+var video3=update(3);
+
+var numberOfPlayingVideos=0;
+
+watchVideo(video1);
+watchVideo(video2);
+watchVideo(video3);
+
+if (numberOfPlayingVideos==0){
+    setTimeout(function(){ 
+        window.location.reload()
+    },1500);
+    
+}
 
 </script>
 </body>
