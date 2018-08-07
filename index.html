@@ -34,14 +34,24 @@
     </span>
 </div>
 
+<div class="override" style="height:100%; width:100%; position:fixed; top:0; left:0; display:none">
+    <video id="clip" width="100%" height="100%" z-index="1">
+        <source></source>
+    </video> 
+</div>
+
 <div style="height:28px; clear:both"></div>
-<!-- <div id="dotcom4" style="text-align:center; height:250px; width:300px; line-height:250px; color:white; float:right; margin-bottom: 28px">
+<div id="dotcom4" style="text-align:center; height:250px; width:300px; line-height:250px; color:white; float:right; margin-bottom: 28px">
     <video width="300px" height="250px">
     </video> 
     <span id="txtBox4" style="text-align:center; margin-top:125px; background-color:black; height:50px; width:300px;">
     </span>
 </div>
-</div> -->
+</div>
+
+<a href="#" class="start" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #000; font-size: 60px; text-align: center; color: #fff; text-decoration: none; display: flex; align-items: center; justify-content: center;">
+    <span style="">Click to start</span>
+</a>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script type="text/javascript">
@@ -49,13 +59,12 @@
 
 var firstNames = ['Antoine', 'Christine', 'Fabienne'];
 var secondNames = ['Doisnel', 'Darbon', 'Tabard']; 
-
    
 function rand_index(len) {
     return Math.floor(Math.random() * len);
 }
-function update(panel) {
 
+function update(panel) {
     "use strict"; 
     var dotcomdiv = document.getElementById('dotcom' + panel);
     var firstName = firstNames[rand_index(firstNames.length)];
@@ -70,61 +79,73 @@ function getImage(query,panel) {
     var video = $('#dotcom'+panel).find('video');
     video.find('source').remove();
     var source = document.createElement('source');
+    
     if(query == 'Antoine Doisnel') {
         source.setAttribute('src', 'video/adoisnel.mp4');
         video.append(source);
-        
-        //video.get(0).play();
         return video.get(0);
     } else if (query == 'Christine Darbon') {
         source.setAttribute('src', 'video/cdarbon.mp4');
         video.append(source);
-        //video.get(0).play();
         return video.get(0);
     } else if (query == 'Fabienne Tabard') {
         source.setAttribute('src', 'video/ftabard.mp4');
         video.append(source);
-        //video.get(0).play();
         return video.get(0);
-    } else {
-        // do nothing
     }
-
 }
-
 
 function watchVideo(video) {
     if (video) {
         numberOfPlayingVideos++;
         video.onended = function(){
+            
+            video.pause();
+            video.removeAttribute('src'); // empty source
+            $(video).find('source').remove();
+            video.load();
+
             numberOfPlayingVideos--;
             if (numberOfPlayingVideos == 0) {
-                window.location.reload(); 
+                 init();
             }
         };
         video.play();  
     }
-     
 }
 
+var video1, video2, video3, numberOfPlayingVideos;
 
-var video1=update(1);
-var video2=update(2);
-var video3=update(3);
+function init() {
+    $('.start').remove();
+    video1=update(1);
+    video2=update(2);
+    video3=update(3);
 
-var numberOfPlayingVideos=0;
+    numberOfPlayingVideos=0;
 
-watchVideo(video1);
-watchVideo(video2);
-watchVideo(video3);
+    watchVideo(video1);
+    watchVideo(video2);
+    watchVideo(video3);
 
-if (numberOfPlayingVideos==0){
-    setTimeout(function(){ 
-        window.location.reload()
-    },1000);
-    
+    if (numberOfPlayingVideos==0){
+        setTimeout(function(){ 
+            init();
+        },1000);
+    }    
 }
 
+$('.start').on("click", init);
+
+
+// $('video').on("click",function(){
+//     $('.override').show();
+//     $('.override').find("source").attr("src", $(this).find("source").attr("src") );
+//     $('.override').find("video").load();
+// });
+// $('.override').on("click",function(){
+//     $('.override').hide();
+// });
 </script>
 </body>
 </html>
