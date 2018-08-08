@@ -1,3 +1,5 @@
+document.cookie = "name=blob";
+
 var firstNames = ['Antoine', 'Christine', 'Fabienne'];
 var secondNames = ['Doisnel', 'Darbon', 'Tabard']; 
    
