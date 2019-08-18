@@ -51,18 +51,18 @@ body {
   height:250px; 
   width:300px; 
   line-height:50px; 
-  color:white; 
+  /*color:white; */
   float:left; 
-  margin-bottom:500px;
+  /*margin-bottom:500px;*/
+
 }
 
-#textbox3 {
+#textBox3 {
   text-align:center; 
-  margin-top:125px; 
   background-color:black; 
   padding:5px; 
   height:50px; 
-  width:300px;"
+  width:300px;
 
 }
 
